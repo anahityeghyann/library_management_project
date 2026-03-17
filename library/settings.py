@@ -1,16 +1,17 @@
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = 'django-insecure-i+qatb4bf+kvl4&&#q37no98@wy+l(h4)j)v#)5eg%36^=e63b'
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = 'core.Libraryuser'
 
 INSTALLED_APPS = [
     'django.contrib.admin',

@@ -1,29 +1,31 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-
-# Virtual environment
-venv/
-.venv/
-
-# Environment variables
-.env
 
 # Django
-*.log
 db.sqlite3
+*.log
 media/
-
-# Static files
 staticfiles/
 
-# OS files
+# Environment
+.env
+.venv/
+env/
+ENV/
+*.secret
+
+# Migrations (you may want to keep them)
+# **/migrations/
+# !**/migrations/__init__.py
+
+# IDEs
+.vscode/
+.idea/
+
+# Mac/Windows
 .DS_Store
 Thumbs.db
 
-# VS Code
-.vscode/
-
-
-.idea/
+# Node (if using frontend)
+node_modules/

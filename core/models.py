@@ -5,10 +5,10 @@ from django.db import models
 class Libraryuser(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     member_type = models.CharField(max_length=50, blank=True, null=True)
-    address = models.TextField(blank=True)  # Taken from Member
+    address = models.TextField(blank=True)
     active_member = models.BooleanField(default=True)
 
-    def str(self):
+    def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.username})"
 
 
@@ -18,7 +18,7 @@ class Publisher(models.Model):
     phone = models.CharField(max_length=20, blank=True)
     website = models.URLField(blank=True)
 
-    def str(self):
+    def __str__(self):
         return self.name
 
 
@@ -47,9 +47,7 @@ class Book(models.Model):
     ]
 
     title = models.CharField(max_length=255)
-
     author = models.CharField(max_length=255)
-
     publication_year = models.IntegerField(null=True, blank=True)
 
     language = models.CharField(
@@ -65,9 +63,13 @@ class Book(models.Model):
 
     page_count = models.IntegerField(null=True, blank=True)
     description = models.TextField(blank=True)
-    publisher = models.CharField(max_length=255)
+    publisher = models.ForeignKey(
+        Publisher,
+        on_delete=models.CASCADE,
+        related_name="books"
+    )
 
-    def str(self):
+    def __str__(self):
         return self.title
 
 
@@ -79,23 +81,47 @@ class BookCopy(models.Model):
         ("damaged", "Damaged"),
     ]
 
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="copies")
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name="copies"
+    )
     barcode = models.CharField(max_length=50, unique=True)
     acquisition_date = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="available")
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="available"
+    )
+
     location = models.CharField(max_length=100)
 
-    def str(self):
+    def __str__(self):
         return f"{self.book.title} ({self.barcode})"
 
 
 class Loan(models.Model):
-    copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE, related_name="loans")
-    member = models.ForeignKey(Libraryuser, on_delete=models.CASCADE, related_name="loans")
+    copy = models.ForeignKey(
+        BookCopy,
+        on_delete=models.CASCADE,
+        related_name="loans"
+    )
+    member = models.ForeignKey(
+        Libraryuser,
+        on_delete=models.CASCADE,
+        related_name="loans"
+    )
+
     loan_date = models.DateField(auto_now_add=True)
     due_date = models.DateField()
     return_date = models.DateField(null=True, blank=True)
-    fine_amount = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
-    def str(self):
+    fine_amount = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        default=0
+    )
+
+    def __str__(self):
         return f"{self.member} - {self.copy}"
