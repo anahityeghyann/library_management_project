@@ -37,10 +37,12 @@ class Book(models.Model):
         ("Non-Fiction", "Non-Fiction"),
         ("Science", "Science"),
         ("Sci-Fi", "Sci-Fi"),
+        ("Adventure", "Adventure"),
         ("Fantasy", "Fantasy"),
         ("Biography", "Biography"),
         ("History", "History"),
         ("Romance", "Romance"),
+        ("Classic", "Classic"),
         ("Mystery", "Mystery"),
         ("Self-Help", "Self-Help"),
         ("Finance", "Finance"),
@@ -49,7 +51,7 @@ class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     publication_year = models.IntegerField(null=True, blank=True)
-
+    image = models.ImageField(upload_to="books/", null=True, blank=True)
     language = models.CharField(
         max_length=50,
         choices=LANGUAGE_CHOICES,
